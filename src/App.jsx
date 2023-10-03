@@ -1,33 +1,31 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState, useEffect } from 'react'
 import './App.css'
+import { getPosts, getToken, isLoggedIn } from './api'
+import { Routes, Route } from 'react-router-dom'
+import Posts from './components/Posts';
+import Navbar from './components/Navbar';
+import LogInPage from './components/LogInPage';
+import Home from './components/Home';
+import NewListing from './components/NewListing';
+import Profile from './components/Profile';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [login, setLogin] = useState(isLoggedIn());
 
+  function isAuth(){
+    return isLoggedIn();
+  }
+  
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Navbar></Navbar>
+      <Routes>
+        <Route path='/' element={<Home isLoggedIn={login}/>}/>
+        <Route path='/login' element={<LogInPage setLogin={setLogin}/>}/>
+        <Route path='/create' element={<NewListing />}/>
+        <Route path='/posts' element={<Posts isAuth={isAuth}/>}/>
+        <Route path='/profile' element={<Profile />}/>
+      </Routes>
     </>
   )
 }
